@@ -1,0 +1,5 @@
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\CLSID\{B75D4DBA-D4B6-4327-A5D8-4F02F2614192}]
+@="ContainmentOuterComponentWithRegFile"
+[HKEY_CLASSES_ROOT\CLSID\{B75D4DBA-D4B6-4327-A5D8-4F02F2614192}\InprocServer32]
+@="C:\\Windows\\System32\\ContainmentOuterComponentWithRegFile.dll"
