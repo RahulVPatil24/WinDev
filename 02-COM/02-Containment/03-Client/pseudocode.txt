@@ -1,0 +1,17 @@
+//hr = CoCreateInstance(CLSID_CSumSubtract, NULL, CLSCTX_INPROC_SERVER, IID_ISum, (void**)&pISum);
+                                            
+HRESULT __stdcall CoCreateInstance(REFCLSID rclsid,LPIUNKNOWN pUnkouter, DWORD dwClsContext, REFIID riid, void** ppv)
+{
+    //variable declarations
+    IClassFactory *pIClassFactory = NULL;
+    HRESULT hr;
+
+    //code
+    hr = CoGetClassObject(rclsid, dwClsContext, NULL, IID_IClassFactory, void** &pIClassFactory);
+    if(SUCCEEDED(hr))
+    {
+        pIClassFactory->CreateInstance(pUnkouter, riid, ppv);
+        pIClassFactory->release();
+    }
+    return(hr);
+}
