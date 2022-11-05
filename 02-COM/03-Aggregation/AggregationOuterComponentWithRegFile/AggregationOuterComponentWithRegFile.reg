@@ -1,0 +1,5 @@
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\CLSID\{1BE63EC0-45B3-4B73-ABD6-669917FCCC2D}]
+@="AggregationOuterComponentWithRegFile"
+[HKEY_CLASSES_ROOT\CLSID\{1BE63EC0-45B3-4B73-ABD6-669917FCCC2D}\InprocServer32]
+@="C:\\Windows\\System32\\AggregationOuterComponentWithRegFile.dll"
