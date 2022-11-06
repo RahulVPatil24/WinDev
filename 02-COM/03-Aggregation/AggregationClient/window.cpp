@@ -84,6 +84,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 	ISubtract *pISubtract = NULL;
 	IMultiplication* pIMultiplication = NULL;
 	IDivision* pIDivision = NULL;
+	IUnknown* pIUnknownFromISum = NULL;
+	IUnknown* pIUnknownFromIMultiplication = NULL;
 	HRESULT hr;
 	int n1, n2, sum, subtract, Multiplication, Division;
 	TCHAR str[255];
@@ -107,12 +109,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 
 		pISum->QueryInterface(IID_ISubtract, (void **)&pISubtract);
 
-		pISum->Release();
-		pISum = NULL;
-
 		pISubtract->SubtractOfTwoIntegers(n1, n2, &subtract);
 		wsprintf(str, TEXT("Subtraction of %d and %d is: %d"), n1, n2, subtract);
 		MessageBox(hwnd, str, TEXT("Subtract"), MB_OK);
+
+
 
 		hr = pISubtract->QueryInterface(IID_IMultiplication, (void**)&pIMultiplication);
 		if (FAILED(hr))
@@ -121,9 +122,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 			DestroyWindow(hwnd);
 		}
 
-		pISubtract->Release();
-		pISubtract = NULL;
-
 		n1 = 30;
 		n2 = 25;
 
@@ -131,16 +129,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		wsprintf(str, TEXT("Multiplication of %d and %d = %d"), n1, n2, Multiplication);
 		MessageBox(hwnd, str, TEXT("Result"), MB_OK);
 
-		hr = pIMultiplication->QueryInterface(IID_IDivision, (void**)&pIDivision);
+
+		hr = pIMultiplication->QueryInterface(IID_ISubtract,(void**)&pISubtract);
+
+		pISubtract->SubtractOfTwoIntegers(n1, n2, &subtract);
+		wsprintf(str, TEXT("Inner to Outer Case Subtraction of %d and %d = %d"), n1, n2, subtract);
+		MessageBox(hwnd, str, TEXT("Result"), MB_OK);
+
+		pIMultiplication->QueryInterface(IID_IDivision, (void**)&pIDivision);
 		if (FAILED(hr))
 		{
 			MessageBox(hwnd, TEXT("IDivision Interface can not be obtained"), TEXT("Error"), MB_OK);
 			DestroyWindow(hwnd);
 		}
-
-
-		pIMultiplication->Release();
-		pIMultiplication = NULL;
 
 		n1 = 200;
 		n2 = 25;
@@ -149,9 +150,37 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		wsprintf(str, TEXT("Division Of %d and %d = %d"), n1, n2, Division);
 		MessageBox(hwnd, str, TEXT("Result"), MB_OK);
 
-		pIDivision->Release();
-		pIDivision = NULL;
+		//Case 6
 
+		pISum->QueryInterface(IID_IUnknown, (void**)&pIUnknownFromISum);
+		
+		pIMultiplication->QueryInterface(IID_IUnknown, (void**)&pIUnknownFromIMultiplication);
+
+		if (pIUnknownFromISum == pIUnknownFromIMultiplication)
+		{
+			MessageBox(hwnd, TEXT("Both Interfaces are same"), TEXT("SAME"), MB_OK);
+		}
+
+		if (pIDivision)
+		{
+			pIDivision->Release();
+			pIDivision = NULL;
+		}
+		if (pIMultiplication)
+		{
+			pIMultiplication->Release();
+			pIMultiplication = NULL;
+		}
+		if (pISubtract)
+		{
+			pISubtract->Release();
+			pISubtract = NULL;
+		}
+		if (pISum)
+		{
+			pISum->Release();
+			pISum = NULL;
+		}
 		DestroyWindow(hwnd);
 		break;
 	case WM_DESTROY:
